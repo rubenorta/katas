@@ -35,5 +35,15 @@ class TestStringCalculator(unittest.TestCase):
     def test_ignorar_valores_mayores_1000(self):
         self.assertEquals(self.sc.add('1000,2,3'),5)
 
+    def test_delimitadores_cualquier_tamano(self):
+        self.assertEquals(self.sc.add("//[***]\n1***2***3"),6)
+
+    def test_delimitadores_multiples(self):
+        self.assertEquals(self.sc.add("//[*][%]\n1*2%3"),6)
+
+    def test_delimitadores_multiples_y_largos(self):
+        self.assertEquals(self.sc.add("//[**][%!]\n1**2%!3"),6)
+
+
 if __name__ == '__main__':
     unittest.main()
