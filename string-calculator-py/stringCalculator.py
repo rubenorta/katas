@@ -16,11 +16,27 @@ class SeparadorConfigurableMultiple:
     def dame_separador(self, cadena):
         return re.findall(r'^\/\/\[(.*)\]\[(.*)\]\n',cadena)[0]
 
+class ExtractorSimple:
+    def dame_digitos(self, cadena, separador):
+        cadena_nueva = cadena.replace('\n', separador)
+        return cadena_nueva.rsplit(separador)
+
+class ExtractorConfigurable:
+    def dame_digitos(self, cadena, separador):
+        separador_y_cadena = cadena.split('\n')   
+        cadena_nueva = separador_y_cadena[1]
+        return cadena_nueva.rsplit(separador)
+
+class ExtractorMultiple:
+    def dame_digitos(self, cadena, separador, multi_separador):
+        separador_y_cadena = cadena.split('\n')   
+        cadena_nueva = separador_y_cadena[1]
+        cadena_nueva = cadena_nueva.replace(multi_separador,separador)
+        return cadena_nueva.rsplit(separador)
 
 class StringCalculator:
 
     separador = ','
-    alt_separador = '\n'
     multi_separador = ''
 
     def contiene_separador_configurable(self, cadena):
@@ -32,30 +48,17 @@ class StringCalculator:
     def contiene_separador_multiple(self, cadena):
         return re.match(r'^\/\/\[.*\]\[.*\]\n',cadena)
 
-    def configura_separador(self, cadena):
-        if self.contiene_separador_configurable(cadena):
-            if self.contiene_separador_multiple(cadena):
-                separadores = SeparadorConfigurableMultiple().dame_separador(cadena)
-                self.separador = separadores[0]
-                self.multi_separador = separadores[1]
-            elif self.contiene_separador_grande(cadena): 
-                self.separador = SeparadorConfigurableGrande().dame_separador(cadena)
-            else:    
-                self.separador = SeparadorConfigurable().dame_separador(cadena)
-        else:
-            self.separador = SeparadorSimple().dame_separador(cadena)
-
-
 
     def extrae_digitos(self, cadena):
-        if self.contiene_separador_configurable(cadena):
-            separador_y_cadena = cadena.split(self.alt_separador)   
-            cadena_nueva = separador_y_cadena[1]
-            if self.contiene_separador_multiple(cadena):
-                cadena_nueva = cadena_nueva.replace(self.multi_separador,self.separador)
+
+        elementos_suma = []
+        if self.contiene_separador_multiple(cadena):
+            elementos_suma = ExtractorMultiple().dame_digitos(cadena, self.separador, self.multi_separador)
+        elif self.contiene_separador_configurable(cadena):
+            elementos_suma = ExtractorConfigurable().dame_digitos(cadena, self.separador)
         else:
-            cadena_nueva = cadena.replace(self.alt_separador,self.separador)
-        return cadena_nueva.rsplit(self.separador)
+            elementos_suma = ExtractorSimple().dame_digitos(cadena, self.separador)
+        return elementos_suma 
 
     def suma_digitos(self, digitos):
         total = 0
@@ -81,3 +84,17 @@ class StringCalculator:
             self.configura_separador(cadena)
             digitos = self.extrae_digitos(cadena)
             return self.suma_digitos(digitos)
+
+
+    def configura_separador(self, cadena):
+        if self.contiene_separador_configurable(cadena):
+            if self.contiene_separador_multiple(cadena):
+                separadores = SeparadorConfigurableMultiple().dame_separador(cadena)
+                self.separador = separadores[0]
+                self.multi_separador = separadores[1]
+            elif self.contiene_separador_grande(cadena): 
+                self.separador = SeparadorConfigurableGrande().dame_separador(cadena)
+            else:    
+                self.separador = SeparadorConfigurable().dame_separador(cadena)
+        else:
+            self.separador = SeparadorSimple().dame_separador(cadena)
