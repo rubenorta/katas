@@ -1,5 +1,22 @@
 import re
 
+class SeparadorSimple:
+    def dame_separador(self, cadena):
+        return ','
+
+class SeparadorConfigurable:
+    def dame_separador(self, cadena):
+        return cadena[2:3]
+
+class SeparadorConfigurableGrande:
+    def dame_separador(self, cadena):
+        return re.findall(r'\/\/\[(.*)\]',cadena)[0]
+
+class SeparadorConfigurableMultiple:
+    def dame_separador(self, cadena):
+        return re.findall(r'^\/\/\[(.*)\]\[(.*)\]\n',cadena)[0]
+
+
 class StringCalculator:
 
     separador = ','
@@ -18,14 +35,17 @@ class StringCalculator:
     def configura_separador(self, cadena):
         if self.contiene_separador_configurable(cadena):
             if self.contiene_separador_multiple(cadena):
-                separadores = re.findall(r'^\/\/\[(.*)\]\[(.*)\]\n',cadena)
-                self.separador = separadores[0][0]
-                self.multi_separador = separadores[0][1]
+                separadores = SeparadorConfigurableMultiple().dame_separador(cadena)
+                self.separador = separadores[0]
+                self.multi_separador = separadores[1]
             elif self.contiene_separador_grande(cadena): 
-                self.separador = re.findall(r'\/\/\[(.*)\]',cadena)[0]
+                self.separador = SeparadorConfigurableGrande().dame_separador(cadena)
             else:    
-                self.separador = cadena[2:3]
-        print self.separador
+                self.separador = SeparadorConfigurable().dame_separador(cadena)
+        else:
+            self.separador = SeparadorSimple().dame_separador(cadena)
+
+
 
     def extrae_digitos(self, cadena):
         if self.contiene_separador_configurable(cadena):
