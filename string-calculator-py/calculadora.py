@@ -10,6 +10,29 @@ class Calculadora(object):
     def __init__ (self, cadena):
         self.cadena = cadena
 
+    def es_configurable(self, cadena):
+        """Permite saber si la calculadora es del tipo configurable"""
+        return re.match(r'//.*\n', cadena)
+
+    def es_grande(self, cadena):
+        """Permite saber si la calculadora es configurable grande"""
+        return re.match(r'^\/\/\[.*\]\n', cadena)
+
+    def es_multiple(self, cadena):
+        """Permite saber si la calculadora es configurable multiple"""
+        return re.match(r'^\/\/\[.*\]\[.*\]\n', cadena)
+
+    def factory(self, cadena):
+
+        if self.es_multiple(cadena):
+            return CalculadoraConfigurableMultiple(cadena)
+        elif self.es_grande(cadena):
+            return CalculadoraConfigurableGrande(cadena)
+        elif self.es_configurable(cadena):
+            return CalculadoraConfigurable(cadena)
+        else:
+            return CalculadoraSimple(cadena)
+
     def suma_digitos(self, digitos):
         total = 0
         valores_negativos = ""
@@ -65,29 +88,3 @@ class CalculadoraConfigurableMultiple(Calculadora):
     def extrae_digitos(self):
         """Extrae los digitos"""
         return extractor.ExtractorMultiple().dame_digitos(self.cadena, self.separador)
-
-class CalculadoraDeCadenas(object):
-    """Factoria para devolver la calculadora debido a cadena"""
-
-    def es_configurable(self, cadena):
-        """Permite saber si la calculadora es del tipo configurable"""
-        return re.match(r'//.*\n', cadena)
-
-    def es_grande(self, cadena):
-        """Permite saber si la calculadora es configurable grande"""
-        return re.match(r'^\/\/\[.*\]\n', cadena)
-
-    def es_multiple(self, cadena):
-        """Permite saber si la calculadora es configurable multiple"""
-        return re.match(r'^\/\/\[.*\]\[.*\]\n', cadena)
-
-    def factory(self, cadena):
-
-        if self.es_multiple(cadena):
-            return CalculadoraConfigurableMultiple(cadena)
-        elif self.es_grande(cadena):
-            return CalculadoraConfigurableGrande(cadena)
-        elif self.es_configurable(cadena):
-            return CalculadoraConfigurable(cadena)
-        else:
-            return CalculadoraSimple(cadena)
