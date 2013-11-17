@@ -3,7 +3,6 @@ import separador
 import extractor
 
 class Calculadora(object):
-    """Calculadora"""
     cadena = ''
     separador = ''
 
@@ -31,57 +30,41 @@ class Calculadora(object):
         return total
 
 class CalculadoraSimple(Calculadora):
-    """Calculadora Simple"""
     def configura_separador(self):
-        """Configura el separador"""
         self.separador = separador.SeparadorSimple().extrae_separador(self.cadena)
     def extrae_digitos(self):
-        """Extrae los digitos"""
         return extractor.ExtractorSimple().dame_digitos(self.cadena, self.separador)
 
 class CalculadoraConfigurable(Calculadora):
-    """Calculadora Configurable"""
     def configura_separador(self):
-        """Configura el separador"""
         self.separador = separador.SeparadorConfigurable().extrae_separador(self.cadena)
     def extrae_digitos(self):
-        """Extrae los digitos"""
         return extractor.ExtractorConfigurable().dame_digitos(self.cadena, self.separador)
 
 class CalculadoraConfigurableGrande(Calculadora):
-    """Calculadora Configurable Grande"""
     def configura_separador(self):
-        """Configura el separador"""
         self.separador = separador.SeparadorConfigurableGrande().extrae_separador(self.cadena)
     def extrae_digitos(self):
-        """Extrae los digitos"""
         return extractor.ExtractorConfigurable().dame_digitos(self.cadena, self.separador)
 
 class CalculadoraConfigurableMultiple(Calculadora):
-    """Calculadora Configurable Multiple"""
     def configura_separador(self):
-        """Configura el separador"""
         self.separador = separador.SeparadorConfigurableMultiple().extrae_separador(self.cadena)
     def extrae_digitos(self):
-        """Extrae los digitos"""
         return extractor.ExtractorMultiple().dame_digitos(self.cadena, self.separador)
 
-class CalculadoraDeCadenas(object):
-    """Factoria para devolver la calculadora debido a cadena"""
+class FactoriaCalculadora(object):
 
     def es_configurable(self, cadena):
-        """Permite saber si la calculadora es del tipo configurable"""
         return re.match(r'//.*\n', cadena)
 
     def es_grande(self, cadena):
-        """Permite saber si la calculadora es configurable grande"""
         return re.match(r'^\/\/\[.*\]\n', cadena)
 
     def es_multiple(self, cadena):
-        """Permite saber si la calculadora es configurable multiple"""
         return re.match(r'^\/\/\[.*\]\[.*\]\n', cadena)
 
-    def factory(self, cadena):
+    def dame_calculadora(self, cadena):
 
         if self.es_multiple(cadena):
             return CalculadoraConfigurableMultiple(cadena)

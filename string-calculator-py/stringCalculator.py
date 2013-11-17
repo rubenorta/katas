@@ -1,8 +1,8 @@
-from calculadora import CalculadoraDeCadenas
+from calculadora import FactoriaCalculadora
 
 class StringCalculator:
 
     def add(self, cadena):
-        calculadora = CalculadoraDeCadenas().factory(cadena)
+        calculadora = FactoriaCalculadora().dame_calculadora(cadena)
         calculadora.configura_separador()
         return calculadora.suma_digitos(calculadora.extrae_digitos())
