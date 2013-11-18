@@ -6,6 +6,9 @@ class Roma():
   def __init__(self):
     self.caracteres = { 'I' : 0  , 'V' : 0 , 'X' : 0 , 'L' : 0 , 'C' : 0 , 'D' : 0 , 'M' : 0}
 
+    self.digito_que_resta = { 'V' : 'I' , 'X' : 'I' , 'L' : 'X' , 'C' : 'X' , 'D' : 'C' , 'M' : 'C'}
+
+
   def suma_caracteres(self):
     return self.caracteres['I'] + self.caracteres['V']*5 + self.caracteres['X']*10 + self.caracteres['L']*50 + self.caracteres['C']*100 + self.caracteres['D']*500 + self.caracteres['M']*1000
 
@@ -27,47 +30,13 @@ class Roma():
         return True
     return False
 
-
-  def existen_mas_I_permitidas(self):
-    return self.caracteres['I'] > 3
-
   def transforma(self, cadena):
 
     for c in cadena:
-
-      if self.es_caracter(c, 'I'):
-        self.incremento('I')
-
-      if self.es_caracter(c, 'V'):
-        self.incremento('V')
-        if self.hay('I'):
-          self.resta_caracter('I')
-
-      if self.es_caracter(c, 'X'):
-        self.incremento('X')
-        if self.hay('I'):
-          self.resta_caracter('I')
-
-      if self.es_caracter(c, 'L'):
-        self.incremento('L')
-        if self.hay('X'):
-          self.resta_caracter('X')
-
-      if self.es_caracter(c, 'C'):
-        self.incremento('C')
-        if self.hay('X'):
-          self.resta_caracter('X')
-
-      if self.es_caracter(c, 'D'):
-        self.incremento('D')
-        if self.hay('C'):
-          self.resta_caracter('C')
-
-      if self.es_caracter(c, 'M'):
-        self.incremento('M')
-        if self.hay('C'):
-          self.resta_caracter('C')
-
+      self.incremento(c)
+      if not self.es_caracter(c, 'I'):
+        if self.hay(self.digito_que_resta[c]):
+          self.resta_caracter(self.digito_que_resta[c])
 
     if self.mas_caracteres_permitidos():
       raise RuntimeError
