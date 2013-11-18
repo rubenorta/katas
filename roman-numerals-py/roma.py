@@ -4,10 +4,10 @@ class Roma():
   caracteres = {}
 
   def __init__(self):
-    self.caracteres = { 'I' : 0  , 'V' : 0 , 'X' : 0}
+    self.caracteres = { 'I' : 0  , 'V' : 0 , 'X' : 0 , 'L' : 0 , 'C' : 0 , 'D' : 0 , 'M' : 0}
 
   def suma_caracteres(self):
-    return self.caracteres['I'] + self.caracteres['V']*5 + self.caracteres['X']*10
+    return self.caracteres['I'] + self.caracteres['V']*5 + self.caracteres['X']*10 + self.caracteres['L']*50 + self.caracteres['C']*100 + self.caracteres['D']*500 + self.caracteres['M']*1000
 
   def es_caracter(self, caracterA, caracterB):
     return caracterA == caracterB
@@ -34,16 +34,40 @@ class Roma():
   def transforma(self, cadena):
 
     for c in cadena:
+
       if self.es_caracter(c, 'I'):
         self.incremento('I')
+
       if self.es_caracter(c, 'V'):
         self.incremento('V')
         if self.hay('I'):
           self.resta_caracter('I')
+
       if self.es_caracter(c, 'X'):
         self.incremento('X')
         if self.hay('I'):
           self.resta_caracter('I')
+
+      if self.es_caracter(c, 'L'):
+        self.incremento('L')
+        if self.hay('X'):
+          self.resta_caracter('X')
+
+      if self.es_caracter(c, 'C'):
+        self.incremento('C')
+        if self.hay('X'):
+          self.resta_caracter('X')
+
+      if self.es_caracter(c, 'D'):
+        self.incremento('D')
+        if self.hay('C'):
+          self.resta_caracter('C')
+
+      if self.es_caracter(c, 'M'):
+        self.incremento('M')
+        if self.hay('C'):
+          self.resta_caracter('C')
+
 
     if self.mas_caracteres_permitidos():
       raise RuntimeError

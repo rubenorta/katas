@@ -44,5 +44,50 @@ class TestRoma(unittest.TestCase):
   def test_transforma_IX(self):
     self.assertEquals(self.r.transforma("IX"), 9)
 
+  def test_transforma_XI(self):
+    self.assertEquals(self.r.transforma("XI"), 11)
 
+  def test_transforma_XX(self):
+    self.assertEquals(self.r.transforma("XX"), 20)
 
+  def test_transforma_XXXI(self):
+    self.assertEquals(self.r.transforma("XXXI"), 31)
+
+  def test_transforma_XXIV(self):
+    self.assertEquals(self.r.transforma("XXIV"), 24)
+
+  def test_transforma_L(self):
+    self.assertEquals(self.r.transforma("L"), 50)
+
+  def test_transforma_XL(self):
+    self.assertEquals(self.r.transforma("XL"), 40)
+
+  def test_transforma_LX(self):
+    self.assertEquals(self.r.transforma("LX"), 60)
+
+  def test_transforma_C(self):
+    self.assertEquals(self.r.transforma("C"), 100)
+
+  def test_transforma_XC(self):
+    self.assertEquals(self.r.transforma("XC"), 90)
+
+  def test_transforma_CCCLXIX(self):
+    self.assertEquals(self.r.transforma("CCCLXIX"), 369)
+
+  def test_transforma_D(self):
+    self.assertEquals(self.r.transforma("D"), 500)
+
+  def test_transforma_CD(self):
+    self.assertEquals(self.r.transforma("CD"), 400)
+
+  def test_transforma_CDXLVIII(self):
+    self.assertEquals(self.r.transforma("CDXLVIII"), 448)
+
+  def test_transforma_M(self):
+    self.assertEquals(self.r.transforma("M"), 1000)
+
+  def test_transforma_MCMXCVIII(self):
+    self.assertEquals(self.r.transforma("MCMXCVIII"), 1998)
+
+  def test_transforma_MMDCCLI(self):
+    self.assertEquals(self.r.transforma("MMDCCLI"), 2751)
